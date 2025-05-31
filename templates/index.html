@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Guessing Game</title>
+    
+    <!-- Tambahkan Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-400 text-gray-900">
+    <div class="relative min-h-screen bg-blue-500">
+        <img src="{{ url_for('static', filename='img/bg.jpg') }}" 
+         class="absolute object-cover w-full h-full bg-opacity-70"/>
+
+        <div class="relative z-10">
+            <header class="text-center py-6 bg-blue-200 bg-opacity-60 shadow-md rounded-md mx-8 mt-6">
+                <h1 class="text-5xl font-bold text-blue-700">Master Regex</h1>  
+                <h2 class="text-3xl font-semibold text-gray-700">The Animal Guessing Game!</h2>                
+            </header>
+
+            <div class="flex items-center justify-center mt-20">
+                <div class="max-w-xl w-full bg-opacity-50 bg-gray-100 shadow-lg rounded-lg p-12">
+                    <div class="mb-4 text-center">
+                        <p class="text-3xl font-semibold text-gray-700">Hint (Regex Pattern)</p>
+                    </div>
+                    
+                    <div class="mb-4 text-center">
+                        <span id="hint" class="text-3xl font-semibold text-blue-600">{{ hint }}</span>
+                    </div>
+                    <div class="flex justify-center mb-4">
+                        <p class="text-xl">Lives: <span id="lives" class="font-semibold text-red-500">{{ lives }}</span></p>
+                    </div>
+                    
+                    <form id="guess-form" class="flex flex-col space-y-6">
+                        <input type="text" id="pattern" name="pattern" placeholder="Guess what?"
+                            class="w-full p-4 border border-gray-400 bg-gray-50 text-gray-900 text-xl rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        
+                        <button type="submit" class="w-full bg-blue-500 text-white text-xl py-3 rounded-md hover:bg-blue-700 transition">
+                            Answer
+                        </button>
+                    </form>        
+                    
+                    <button id="restart-button" style="display:none;" class="w-full mt-4 bg-gray-400 text-white py-2 rounded-md hover:bg-gray-500 transition">
+                        Try again!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pop-up Modal -->
+    <!-- Pop-up Modal -->
+<!-- Pop-up Modal -->
+    <div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white w-700 md:w-[450px] p-8 rounded-xl shadow-xl border-4 border-blue-500 text-center relative">
+            <h2 id="popupTitle" class="text-2xl font-bold text-blue-700">🎉 Congratulations! 🎉</h2>
+            <p id="popupMessage" class="text-lg text-gray-800 mt-2"></p>
+
+            <!-- Tombol Close -->
+            <button onclick="closePopup()" 
+                class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-lg font-semibold rounded-lg hover:scale-105 transition">
+                Close
+            </button>
+        </div>
+    </div>
+
+
+
+    <script>
+        function showPopup(title, message) {
+            console.log("showPopup() dipanggil!"); // Debugging
+
+            document.getElementById("popupTitle").textContent = title;
+            document.getElementById("popupMessage").textContent = message;
+
+            // Tampilkan modal dengan menghapus class 'hidden'
+            document.getElementById("popupModal").classList.remove("hidden");
+        }
+
+        function closePopup() {
+            document.getElementById('popupModal').classList.add('hidden');
+        }
+
+        document.getElementById('guess-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const pattern = document.getElementById('pattern').value;
+
+            fetch('/guess', {
+                method: 'POST',
+                body: new URLSearchParams({'pattern': pattern}),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('lives').textContent = data.lives;
+                document.getElementById('hint').textContent = data.hint;
+
+                // Tampilkan pop-up dengan pesan dari Flask
+                showPopup(data.message);
+
+                if (data.correct) {
+                    showPopup("🎉 Correct! 🎉", `You got it right! The correct answer is "${data.correct_word}".`);
+                }
+
+                if (data.game_over) {
+                    document.getElementById('restart-button').style.display = 'inline';
+                    showPopup("Game Over", `Oops! 😭 You got them all wrong... Try again next time! ✨ and the correct answer was "${data.correct_word}".`);
+                }
+                // Hapus isi input setelah submit
+                document.getElementById('pattern').value = '';
+            });
+        });
+
+        document.getElementById('restart-button').addEventListener('click', function() {
+            fetch('/restart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('lives').textContent = data.lives;
+                document.getElementById('hint').textContent = data.hint;
+                document.getElementById('restart-button').style.display = 'none';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

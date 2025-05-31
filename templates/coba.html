@@ -1,0 +1,94 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Guessing Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+    <nav class="flex flex-col py-6 sm:flex-row sm:justify-between sm:items-center">
+        <div class="flex items-center mt-6 -mx-6 sm:mt-5">
+            <a href="{{ url_for('login') }}" class="w-full px-5 py-2 mt-6 text-sm font-semibold text-white transition-colors duration-300 transform bg-black rounded-md hover:bg-gray-800">Back</a>
+        </div>
+    </nav>
+
+    <div class="flex flex-col items-center justify-center">
+        <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
+            <h1 class="text-3xl font-bold text-center mb-6">Word Guessing Game</h1>
+    
+            <div class="mb-4">
+                <p class="text-lg font-semibold">Hint (Regex Pattern): <span id="hint" class="text-indigo-600">{{ hint }}</span></p>
+            </div>
+    
+            <div class="mb-4">
+                <p id="word_masked" class="text-2xl font-mono text-gray-800">{{ word_masked }}</p>
+            </div>
+    
+            <div class="flex justify-between mb-4">
+                <p>Lives: <span id="lives" class="font-semibold text-red-600">{{ lives }}</span></p>
+                <p>Points: <span id="points" class="font-semibold text-green-600">{{ points }}</span></p>
+            </div>
+    
+            <p id="message" class="text-sm text-gray-600 mb-4"></p>
+    
+            <form id="guess-form" class="flex flex-col space-y-4">
+                <input type="text" id="pattern" name="pattern" placeholder="Enter regex pattern" required
+                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition">Guess</button>
+            </form>
+    
+            <button id="restart-button" style="display:none;" class="w-full mt-4 bg-gray-600 text-white py-2 rounded-md hover:bg-gray-700 transition">
+                Restart Game
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('guess-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const pattern = document.getElementById('pattern').value;
+
+            fetch('/guess', {
+                method: 'POST',
+                body: new URLSearchParams({'pattern': pattern}),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').textContent = data.message;
+                document.getElementById('lives').textContent = data.lives;
+                document.getElementById('points').textContent = data.points;
+                document.getElementById('hint').textContent = data.hint;
+
+                if (data.word_masked) {
+                    document.getElementById('word_masked').textContent = data.word_masked;
+                }
+
+                if (data.game_over) {
+                    document.getElementById('restart-button').style.display = 'inline';
+                    document.getElementById('message').textContent += ` The correct word was "${data.correct_word}".`;
+                }
+            });
+        });
+
+        document.getElementById('restart-button').addEventListener('click', function() {
+            fetch('/restart', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('word_masked').textContent = data.word_masked;
+                document.getElementById('lives').textContent = data.lives;
+                document.getElementById('points').textContent = data.points;
+                document.getElementById('hint').textContent = data.hint;
+                document.getElementById('message').textContent = '';
+                document.getElementById('restart-button').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html> -->

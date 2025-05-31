@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Hewan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Hapus overflow hidden agar bisa discroll */
+        body {
+            position: relative;
+        }
+        
+        /* Canvas tetap di belakang tanpa menghalangi scroll */
+        .cloud-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="bg-blue-300 flex flex-col items-center justify-center min-h-screen relative">
+    <canvas id="cloudCanvas" class="cloud-canvas"></canvas>
+
+    <header class="text-center<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>List Hewan</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+            <style>
+                /* Hapus overflow hidden agar bisa discroll */
+                body {
+                    position: relative;
+                }
+                
+                /* Canvas tetap di belakang tanpa menghalangi scroll */
+                .cloud-canvas {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: auto;
+                    z-index: -1;
+                    pointer-events: none;
+                }
+            </style>
+        </head>
+        
+        <body class="bg-blue-300 flex flex-col items-center justify-center min-h-screen relative">
+            <canvas id="cloudCanvas" class="cloud-canvas"></canvas>
+        
+            <header class="text-center">
+                <h1 class="text-5xl font-bold text-blue-700">List of Animals</h1>  
+                <h2 class="text-3xl font-semibold text-gray-700">Here are the animals that may appear in the game, so pay close attention!</h2>                
+            </header>    
+        
+            <div class="bg-black bg-opacity-50 p-6 rounded-lg w-full max-w-5xl relative">
+                <div id="animalList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-7 text-center">
+                    <!-- Hewan akan dimasukkan di sini melalui JavaScript -->
+                </div>
+            </div>
+        
+            <div class="text-center flex justify-center gap-4 mb-10">
+                <button class="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-700 transition" onclick="goBack()">Kembali</button>
+                <button class="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-700 transition" onclick="startGame()">Start Game</button>
+            </div>
+        
+            <script>
+                const animals = [
+                    "alligator", "alpaca", "anaconda", "bat", "bear", "bee", "bird",
+                    "bull", "butterfly", "cheetah", "chicken", "clam", "dog",
+                    "dragonfly", "duck", "eagle", "eel", "elephant", "fish", "flamingo",
+                    "frog", "giraffe", "goat", "goose", "gorilla", "hippopotamus", "horse",
+                    "iguana", "lizard", "monkey", "mosquito", "octopus", "owl", "panda",
+                    "peacock", "penguin", "pig", "racoon", "rhinoceros", "seahorse", "sheep", "snail", "tiger", "turtle", "shark", "chimpanzee", "cow", "hamster", "zebra"
+                ];
+                
+                const container = document.getElementById("animalList");
+                animals.forEach(animal => {
+                    const div = document.createElement("div");
+                    div.classList.add("text-white", "text-lg", "flex", "flex-col", "items-center", "gap-2");
+                    div.innerHTML = `<img src="static/img/hewan2/${animal}.jpg" alt="${animal}" class="w-24 h-24 object-contain bg-white rounded-lg p-2 shadow-md"> 
+                                     <p class="font-semibold">${animal}</p>`;
+                    container.appendChild(div);
+                });
+        
+                function startGame() {
+                    window.location.href = "/index";
+                }
+                function goBack() {
+                    window.location.href = "/";
+                }
+        
+                // DRAW CLOUDS
+                const canvas = document.getElementById("cloudCanvas");
+                const ctx = canvas.getContext("2d");
+        
+                function resizeCanvas() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = document.body.scrollHeight; // Sesuaikan tinggi canvas dengan tinggi halaman
+                    drawClouds();
+                }
+        
+                function drawCloud(x, y) {
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+                    ctx.beginPath();
+                    ctx.arc(x, y, 30, 0, Math.PI * 2);
+                    ctx.arc(x + 30, y - 10, 30, 0, Math.PI * 2);
+                    ctx.arc(x + 60, y, 30, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+        
+                function drawClouds() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    for (let i = 0; i < 10; i++) {
+                        let x = Math.random() * 200;
+                        let y = Math.random() * canvas.height;
+                        drawCloud(x, y);
+                    }
+                    for (let i = 0; i < 10; i++) {
+                        let x = canvas.width - Math.random() * 200;
+                        let y = Math.random() * canvas.height;
+                        drawCloud(x, y);
+                    }
+                }
+        
+                window.addEventListener("resize", resizeCanvas);
+                window.addEventListener("load", resizeCanvas);
+            </script>
+        </body>
+        </html>
+       
