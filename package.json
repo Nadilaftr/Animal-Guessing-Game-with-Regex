@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "tailwindcss": "^3.4.10"
+  },
+  "dependencies": {
+    "tailwindcss-text-stroke": "^0.0.5"
+  }
+}
